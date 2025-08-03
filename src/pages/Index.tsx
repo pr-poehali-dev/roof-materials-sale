@@ -2,33 +2,65 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import Icon from "@/components/ui/icon";
+import { useState } from "react";
 
 export default function Index() {
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedSubcategory, setSelectedSubcategory] = useState("all");
+
+  const categories = {
+    "Кровельные материалы": {
+      "Металлочерепица": ["Классик", "Монтеррей", "Каскад"],
+      "Гибкая черепица": ["Стандарт", "Премиум", "Элит"],
+      "Профнастил": ["С-8", "НС-35", "Н-60"],
+      "Ондулин": ["Смарт", "Компакт", "ДИY"]
+    },
+    "Фасадные материалы": {
+      "Сайдинг": ["Виниловый", "Металлический", "Фиброцементный"],
+      "Фасадные панели": ["Под камень", "Под кирпич", "Гладкие"],
+      "Блок-хаус": ["Металлический", "Виниловый"],
+      "Керамогранит": ["Матовый", "Глянцевый", "Структурный"]
+    },
+    "Комплектующие": {
+      "Водосток": ["ПВХ", "Металл", "Медь"],
+      "Мансардные окна": ["ПВХ", "Дерево", "Комбинированные"],
+      "Софиты": ["Алюминий", "ПВХ", "Сталь"],
+      "Доборные элементы": ["Коньки", "Планки", "Уголки"]
+    }
+  };
+
   const products = [
     {
       id: 1,
-      name: "Металлочерепица",
+      name: "Металлочерепица Монтеррей",
       price: "от 450 ₽/м²",
       image: "/img/cc65dda3-06b9-4979-8215-195bd5c2a2e2.jpg",
       description: "Прочная металлочерепица с полимерным покрытием",
-      category: "Кровля"
+      category: "Кровельные материалы",
+      subcategory: "Металлочерепица",
+      type: "Монтеррей"
     },
     {
       id: 2,
-      name: "Гибкая черепица",
-      price: "от 320 ₽/м²",
+      name: "Гибкая черепица Премиум",
+      price: "от 520 ₽/м²",
       image: "/img/cc65dda3-06b9-4979-8215-195bd5c2a2e2.jpg",
       description: "Битумная черепица премиум класса",
-      category: "Кровля"
+      category: "Кровельные материалы",
+      subcategory: "Гибкая черепица",
+      type: "Премиум"
     },
     {
       id: 3,
-      name: "Профнастил",
-      price: "от 280 ₽/м²",
+      name: "Профнастил НС-35",
+      price: "от 380 ₽/м²",
       image: "/img/cc65dda3-06b9-4979-8215-195bd5c2a2e2.jpg",
-      description: "Оцинкованный профнастил с покрытием",
-      category: "Кровля"
+      description: "Универсальный профнастил для кровли и стен",
+      category: "Кровельные материалы",
+      subcategory: "Профнастил",
+      type: "НС-35"
     },
     {
       id: 4,
@@ -36,9 +68,57 @@ export default function Index() {
       price: "от 180 ₽/м²",
       image: "/img/cc65dda3-06b9-4979-8215-195bd5c2a2e2.jpg",
       description: "Долговечный виниловый сайдинг",
-      category: "Фасад"
+      category: "Фасадные материалы",
+      subcategory: "Сайдинг",
+      type: "Виниловый"
+    },
+    {
+      id: 5,
+      name: "Фасадные панели под камень",
+      price: "от 650 ₽/м²",
+      image: "/img/cc65dda3-06b9-4979-8215-195bd5c2a2e2.jpg",
+      description: "Декоративные панели с имитацией природного камня",
+      category: "Фасадные материалы",
+      subcategory: "Фасадные панели",
+      type: "Под камень"
+    },
+    {
+      id: 6,
+      name: "Водосток ПВХ",
+      price: "от 280 ₽/м.п.",
+      image: "/img/cc65dda3-06b9-4979-8215-195bd5c2a2e2.jpg",
+      description: "Система водостока из ПВХ",
+      category: "Комплектующие",
+      subcategory: "Водосток",
+      type: "ПВХ"
+    },
+    {
+      id: 7,
+      name: "Мансардное окно ПВХ",
+      price: "от 12500 ₽/шт",
+      image: "/img/cc65dda3-06b9-4979-8215-195bd5c2a2e2.jpg",
+      description: "Мансардное окно с тройным стеклопакетом",
+      category: "Комплектующие",
+      subcategory: "Мансардные окна",
+      type: "ПВХ"
+    },
+    {
+      id: 8,
+      name: "Металлочерепица Каскад",
+      price: "от 495 ₽/м²",
+      image: "/img/cc65dda3-06b9-4979-8215-195bd5c2a2e2.jpg",
+      description: "Стильная металлочерепица с волнообразным профилем",
+      category: "Кровельные материалы",
+      subcategory: "Металлочерепица",
+      type: "Каскад"
     }
   ];
+
+  const filteredProducts = products.filter(product => {
+    if (selectedCategory === "all") return true;
+    if (selectedSubcategory === "all") return product.category === selectedCategory;
+    return product.category === selectedCategory && product.subcategory === selectedSubcategory;
+  });
 
   const services = [
     {
@@ -86,8 +166,35 @@ export default function Index() {
               <Icon name="Building2" size={32} />
               <h1 className="text-2xl font-bold">КровляСтрой</h1>
             </div>
-            <nav className="hidden md:flex space-x-6">
-              <a href="#catalog" className="hover:text-gray-300 transition-colors">Каталог</a>
+            <nav className="hidden lg:flex space-x-6">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center space-x-1 hover:text-gray-300 transition-colors">
+                  <span>Каталог</span>
+                  <Icon name="ChevronDown" size={16} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80">
+                  {Object.entries(categories).map(([category, subcategories]) => (
+                    <div key={category}>
+                      <DropdownMenuLabel className="text-sm font-semibold">{category}</DropdownMenuLabel>
+                      {Object.entries(subcategories).map(([subcategory, types]) => (
+                        <DropdownMenuItem 
+                          key={subcategory}
+                          className="flex justify-between items-center cursor-pointer"
+                          onClick={() => {
+                            setSelectedCategory(category);
+                            setSelectedSubcategory(subcategory);
+                            document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                        >
+                          <span>{subcategory}</span>
+                          <Badge variant="outline" className="text-xs">{types.length}</Badge>
+                        </DropdownMenuItem>
+                      ))}
+                      <DropdownMenuSeparator />
+                    </div>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               <a href="#services" className="hover:text-gray-300 transition-colors">Услуги</a>
               <a href="#about" className="hover:text-gray-300 transition-colors">О компании</a>
               <a href="#certificates" className="hover:text-gray-300 transition-colors">Сертификаты</a>
@@ -132,91 +239,91 @@ export default function Index() {
             </p>
           </div>
           
-          <Tabs defaultValue="all" className="mb-8">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="all">Все материалы</TabsTrigger>
-              <TabsTrigger value="roof">Кровля</TabsTrigger>
-              <TabsTrigger value="facade">Фасад</TabsTrigger>
-            </TabsList>
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-4 mb-6">
+              <Button 
+                variant={selectedCategory === "all" ? "default" : "outline"}
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setSelectedSubcategory("all");
+                }}
+              >
+                Все материалы
+              </Button>
+              {Object.keys(categories).map((category) => (
+                <Button 
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setSelectedSubcategory("all");
+                  }}
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
             
-            <TabsContent value="all" className="mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {products.map((product) => (
-                  <Card key={product.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader className="p-0">
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-48 object-cover rounded-t-lg"
-                      />
-                    </CardHeader>
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <CardTitle className="text-lg">{product.name}</CardTitle>
-                        <Badge variant="secondary">{product.category}</Badge>
-                      </div>
-                      <CardDescription className="mb-3">{product.description}</CardDescription>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xl font-bold text-primary">{product.price}</span>
-                        <Button size="sm">
-                          <Icon name="ShoppingCart" size={16} className="mr-1" />
-                          В корзину
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+            {selectedCategory !== "all" && (
+              <div className="flex flex-wrap gap-2 mb-6">
+                <Button 
+                  size="sm"
+                  variant={selectedSubcategory === "all" ? "secondary" : "ghost"}
+                  onClick={() => setSelectedSubcategory("all")}
+                >
+                  Все подкатегории
+                </Button>
+                {Object.keys(categories[selectedCategory as keyof typeof categories] || {}).map((subcategory) => (
+                  <Button 
+                    key={subcategory}
+                    size="sm"
+                    variant={selectedSubcategory === subcategory ? "secondary" : "ghost"}
+                    onClick={() => setSelectedSubcategory(subcategory)}
+                  >
+                    {subcategory}
+                  </Button>
                 ))}
               </div>
-            </TabsContent>
+            )}
             
-            <TabsContent value="roof">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.filter(p => p.category === "Кровля").map((product) => (
-                  <Card key={product.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader className="p-0">
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-48 object-cover rounded-t-lg"
-                      />
-                    </CardHeader>
-                    <CardContent className="p-4">
-                      <CardTitle className="text-lg mb-2">{product.name}</CardTitle>
-                      <CardDescription className="mb-3">{product.description}</CardDescription>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xl font-bold text-primary">{product.price}</span>
-                        <Button size="sm">В корзину</Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <Card key={product.id} className="hover:shadow-lg transition-shadow group">
+                  <CardHeader className="p-0">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-48 object-cover rounded-t-lg group-hover:scale-105 transition-transform"
+                    />
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <CardTitle className="text-lg text-left">{product.name}</CardTitle>
+                      <Badge variant="outline" className="text-xs">{product.type}</Badge>
+                    </div>
+                    <div className="mb-2">
+                      <Badge variant="secondary" className="text-xs mr-1">{product.subcategory}</Badge>
+                    </div>
+                    <CardDescription className="mb-3">{product.description}</CardDescription>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xl font-bold text-primary">{product.price}</span>
+                      <Button size="sm">
+                        <Icon name="ShoppingCart" size={16} className="mr-1" />
+                        В корзину
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
             
-            <TabsContent value="facade">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.filter(p => p.category === "Фасад").map((product) => (
-                  <Card key={product.id} className="hover:shadow-lg transition-shadow">
-                    <CardHeader className="p-0">
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-48 object-cover rounded-t-lg"
-                      />
-                    </CardHeader>
-                    <CardContent className="p-4">
-                      <CardTitle className="text-lg mb-2">{product.name}</CardTitle>
-                      <CardDescription className="mb-3">{product.description}</CardDescription>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xl font-bold text-primary">{product.price}</span>
-                        <Button size="sm">В корзину</Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-12">
+                <Icon name="Package" size={48} className="mx-auto text-gray-400 mb-4" />
+                <p className="text-gray-500">Товары в данной категории не найдены</p>
               </div>
-            </TabsContent>
-          </Tabs>
+            )}
+          </div>
         </div>
       </section>
 
