@@ -209,19 +209,37 @@ export default function Index() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-accent text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-5xl font-bold mb-6">Кровельные материалы и фасады</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
+      <section className="relative bg-gradient-to-br from-primary via-gray-900 to-secondary text-white py-20 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-secondary to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-secondary to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
+            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <defs>
+                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+                </pattern>
+              </defs>
+              <rect width="100" height="100" fill="url(#grid)" />
+            </svg>
+          </div>
+        </div>
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+            Кровельные материалы и фасады
+          </h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto text-gray-200">
             Профессиональные решения для строительства и ремонта. 
             Качественные материалы с гарантией от производителя.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary">
+            <Button size="lg" variant="secondary" className="bg-secondary hover:bg-blue-600 text-white border-0">
               <Icon name="ShoppingCart" size={20} className="mr-2" />
               Перейти в каталог
             </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
+            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary transition-all duration-300">
               <Icon name="Calculator" size={20} className="mr-2" />
               Рассчитать стоимость
             </Button>
@@ -230,11 +248,47 @@ export default function Index() {
       </section>
 
       {/* Catalog Section */}
-      <section id="catalog" className="py-16">
-        <div className="container mx-auto px-4">
+      <section id="catalog" className="py-16 relative overflow-hidden">
+        {/* Background Graphics */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-0 w-72 h-72 bg-gradient-to-br from-secondary/20 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-primary/10 to-transparent rounded-full blur-3xl"></div>
+          
+          {/* Geometric Patterns */}
+          <div className="absolute top-10 right-10 w-32 h-32 opacity-5">
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <polygon points="50,0 90,35 75,85 25,85 10,35" fill="currentColor" className="text-secondary"/>
+            </svg>
+          </div>
+          <div className="absolute bottom-20 left-10 w-24 h-24 opacity-5">
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="8" className="text-primary"/>
+              <circle cx="50" cy="50" r="20" fill="currentColor" className="text-secondary"/>
+            </svg>
+          </div>
+          
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <defs>
+                <pattern id="catalogGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-300"/>
+                </pattern>
+              </defs>
+              <rect width="100" height="100" fill="url(#catalogGrid)" />
+            </svg>
+          </div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-primary mb-4">Каталог продукции</h3>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <div className="inline-block p-3 bg-gradient-to-r from-secondary/20 to-primary/20 rounded-2xl mb-4">
+              <Icon name="Package" size={48} className="text-secondary mx-auto" />
+            </div>
+            <h3 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
+              Каталог продукции
+            </h3>
+            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
               Широкий ассортимент кровельных материалов и фасадных систем от ведущих производителей
             </p>
           </div>
@@ -287,32 +341,67 @@ export default function Index() {
             )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filteredProducts.map((product) => (
-                <Card key={product.id} className="hover:shadow-lg transition-shadow group">
-                  <CardHeader className="p-0">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-48 object-cover rounded-t-lg group-hover:scale-105 transition-transform"
-                    />
+              {filteredProducts.map((product, index) => (
+                <Card key={product.id} className="hover:shadow-2xl transition-all duration-500 group relative overflow-hidden bg-gradient-to-br from-white to-gray-50 border-0 shadow-lg">
+                  {/* Card Background Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <CardHeader className="p-0 relative">
+                    <div className="relative overflow-hidden rounded-t-lg">
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                      {/* Image Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      
+                      {/* Top Badge */}
+                      <div className="absolute top-3 right-3">
+                        <Badge variant="outline" className="bg-white/90 backdrop-blur-sm text-xs border-secondary/20">
+                          {product.type}
+                        </Badge>
+                      </div>
+                      
+                      {/* Index Badge */}
+                      <div className="absolute top-3 left-3">
+                        <div className="w-8 h-8 bg-gradient-to-br from-secondary to-primary rounded-full flex items-center justify-center text-white text-xs font-bold">
+                          {index + 1}
+                        </div>
+                      </div>
+                    </div>
                   </CardHeader>
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <CardTitle className="text-lg text-left">{product.name}</CardTitle>
-                      <Badge variant="outline" className="text-xs">{product.type}</Badge>
+                  
+                  <CardContent className="p-6 relative z-10">
+                    <div className="mb-3">
+                      <CardTitle className="text-lg text-left mb-2 group-hover:text-primary transition-colors duration-300">
+                        {product.name}
+                      </CardTitle>
+                      <Badge variant="secondary" className="text-xs bg-gradient-to-r from-secondary/20 to-primary/20 text-primary border-0">
+                        {product.subcategory}
+                      </Badge>
                     </div>
-                    <div className="mb-2">
-                      <Badge variant="secondary" className="text-xs mr-1">{product.subcategory}</Badge>
-                    </div>
-                    <CardDescription className="mb-3">{product.description}</CardDescription>
+                    
+                    <CardDescription className="mb-4 text-gray-600 group-hover:text-gray-700 transition-colors">
+                      {product.description}
+                    </CardDescription>
+                    
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-primary">{product.price}</span>
-                      <Button size="sm">
+                      <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        {product.price}
+                      </span>
+                      <Button 
+                        size="sm" 
+                        className="bg-gradient-to-r from-secondary to-primary hover:from-primary hover:to-secondary transition-all duration-300 transform group-hover:scale-105 shadow-lg"
+                      >
                         <Icon name="ShoppingCart" size={16} className="mr-1" />
                         В корзину
                       </Button>
                     </div>
                   </CardContent>
+                  
+                  {/* Bottom Gradient */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary via-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </Card>
               ))}
             </div>
